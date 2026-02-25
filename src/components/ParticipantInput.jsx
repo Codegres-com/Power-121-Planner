@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Papa from 'papaparse';
-import { Upload, Plus, Trash2 } from 'lucide-react';
+import { Upload, Plus, Trash2, Users, FileText } from 'lucide-react';
 
 const ParticipantInput = ({ participants, setParticipants }) => {
   const [textInput, setTextInput] = useState('');
@@ -97,57 +97,75 @@ const ParticipantInput = ({ participants, setParticipants }) => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Participants</h2>
+    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 transition-all hover:shadow-xl">
+      <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+        <div className="flex items-center gap-3">
+             <div className="bg-indigo-50 p-2 rounded-lg text-indigo-600">
+                <Users size={20} />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">Participants</h2>
+        </div>
         {participants.length > 0 && (
-            <button onClick={handleClear} className="text-sm text-red-500 hover:underline">Clear All</button>
+            <button
+                onClick={handleClear}
+                className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-full transition-colors font-medium"
+            >
+                Clear All
+            </button>
         )}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 mb-4">
-        <textarea
-            className="w-full md:w-3/4 border p-2 rounded h-24 text-sm font-mono"
-            placeholder="Paste CSV data (e.g. John Doe, john@example.com)"
-            value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
-        />
-        <div className="flex flex-col gap-2 w-full md:w-1/4">
+      <div className="flex flex-col gap-4 mb-6">
+        <div className="relative">
+             <textarea
+                className="w-full bg-gray-50 border border-gray-200 p-4 rounded-xl h-32 text-sm font-mono focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all resize-y placeholder:text-gray-400"
+                placeholder="Paste CSV data here...&#10;Format: Name, Email&#10;Example: John Doe, john@example.com"
+                value={textInput}
+                onChange={(e) => setTextInput(e.target.value)}
+            />
+            <FileText className="absolute right-4 top-4 text-gray-300 pointer-events-none" size={20} />
+        </div>
+
+        <div className="flex gap-3">
             <button
                 onClick={handleTextPaste}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center justify-center gap-2 transition"
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all font-medium shadow-sm hover:shadow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!textInput}
             >
-                <Plus size={16} /> Add
+                <Plus size={18} /> Add List
             </button>
-            <label className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded cursor-pointer flex items-center justify-center gap-2 transition border">
-                <Upload size={16} /> Upload CSV
+            <label className="flex-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-lg cursor-pointer flex items-center justify-center gap-2 transition-all font-medium shadow-sm hover:shadow">
+                <Upload size={18} /> Upload CSV
                 <input type="file" accept=".csv,.txt" onChange={handleFileUpload} className="hidden" />
             </label>
         </div>
       </div>
 
-      <div className="max-h-60 overflow-y-auto border rounded bg-gray-50">
+      <div className="max-h-60 overflow-y-auto border border-gray-100 rounded-xl bg-gray-50/50 custom-scrollbar">
         {participants.length === 0 ? (
-            <div className="p-8 text-center text-gray-400">
-                No participants added yet.
+            <div className="py-12 px-6 text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3 text-gray-400">
+                    <Users size={24} />
+                </div>
+                <p className="text-gray-500 font-medium">No participants added yet.</p>
+                <p className="text-xs text-gray-400 mt-1">Add names and emails to start scheduling.</p>
             </div>
         ) : (
-            <ul className="divide-y divide-gray-200">
+            <ul className="divide-y divide-gray-100">
                 {participants.map((p, idx) => (
-                    <li key={idx} className="flex justify-between items-center p-3 hover:bg-white transition">
+                    <li key={idx} className="flex justify-between items-center p-3 hover:bg-white transition-colors group">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
+                            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 flex items-center justify-center text-sm font-bold shadow-sm border border-white">
                                 {p.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex flex-col">
-                                <span className="font-medium text-sm">{p.name}</span>
-                                <span className="text-gray-500 text-xs">{p.email}</span>
+                                <span className="font-semibold text-sm text-gray-800">{p.name}</span>
+                                <span className="text-gray-500 text-xs font-mono">{p.email}</span>
                             </div>
                         </div>
                         <button
                             onClick={() => setParticipants(participants.filter((_, i) => i !== idx))}
-                            className="text-gray-400 hover:text-red-500 transition"
+                            className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                             title="Remove"
                         >
                             <Trash2 size={16} />
@@ -157,8 +175,10 @@ const ParticipantInput = ({ participants, setParticipants }) => {
             </ul>
         )}
       </div>
-      <div className="mt-2 text-right text-xs text-gray-500">
-        Total: {participants.length}
+      <div className="mt-3 flex justify-end">
+         <span className="bg-gray-100 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-md">
+            Total: {participants.length}
+         </span>
       </div>
     </div>
   );
