@@ -50,28 +50,28 @@ const SchedulePreview = ({ schedule }) => {
                 <div className="divide-y divide-gray-100">
                     {meetings.map((meeting, idx) => (
                         <div key={idx} className="px-4 py-4 flex flex-col md:flex-row justify-between items-center hover:bg-gray-50/50 transition-colors gap-3 group">
-                            <div className="flex gap-4 items-center w-full md:w-auto justify-center md:justify-start">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center w-full justify-center md:justify-start">
                                 {/* Player 1 */}
-                                <div className="flex items-center gap-3 min-w-[140px] justify-end">
-                                    <div className="flex flex-col items-end">
+                                <div className="flex items-center gap-3 w-full sm:w-auto sm:min-w-[140px] justify-center sm:justify-end">
+                                    <div className="flex flex-col items-center sm:items-end text-center sm:text-right">
                                         <span className="font-semibold text-gray-900 truncate max-w-[120px]" title={meeting.pair[0].name}>
                                             {meeting.pair[0].name}
                                         </span>
                                         <span className="text-[10px] text-gray-400 truncate max-w-[100px]">{meeting.pair[0].email}</span>
                                     </div>
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-600 flex items-center justify-center text-sm font-bold shadow-sm border-2 border-white ring-1 ring-gray-100">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-600 flex items-center justify-center text-sm font-bold shadow-sm border-2 border-white ring-1 ring-gray-100 shrink-0">
                                         {meeting.pair[0].name.charAt(0).toUpperCase()}
                                     </div>
                                 </div>
 
-                                <span className="text-gray-300 text-xs font-black italic tracking-widest">VS</span>
+                                <span className="text-gray-300 text-xs font-black italic tracking-widest rotate-90 sm:rotate-0 my-1 sm:my-0">VS</span>
 
                                 {/* Player 2 */}
-                                <div className="flex items-center gap-3 min-w-[140px]">
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600 flex items-center justify-center text-sm font-bold shadow-sm border-2 border-white ring-1 ring-gray-100">
+                                <div className="flex items-center gap-3 w-full sm:w-auto sm:min-w-[140px] justify-center sm:justify-start">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-600 flex items-center justify-center text-sm font-bold shadow-sm border-2 border-white ring-1 ring-gray-100 shrink-0">
                                         {meeting.pair[1].name.charAt(0).toUpperCase()}
                                     </div>
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
                                         <span className="font-semibold text-gray-900 truncate max-w-[120px]" title={meeting.pair[1].name}>
                                             {meeting.pair[1].name}
                                         </span>

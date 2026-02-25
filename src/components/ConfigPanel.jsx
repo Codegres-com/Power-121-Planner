@@ -14,44 +14,44 @@ const ConfigPanel = ({ config, setConfig }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6 transition-all hover:shadow-xl">
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+    <div className="bg-white p-5 md:p-6 rounded-xl shadow-lg border border-gray-100 mb-6 transition-all hover:shadow-xl">
+      <div className="flex items-center gap-3 mb-5 md:mb-6 pb-4 border-b border-gray-100">
         <div className="bg-blue-50 p-2 rounded-lg text-blue-600">
             <Settings size={20} />
         </div>
-        <h2 className="text-xl font-bold text-gray-800">Configuration</h2>
+        <h2 className="text-lg md:text-xl font-bold text-gray-800">Configuration</h2>
       </div>
 
       <div className="space-y-6">
         {/* Scheduling Mode Section */}
         <div>
           <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Scheduling Mode</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label className={`relative flex items-start gap-3 cursor-pointer p-4 border-2 rounded-xl transition-all ${config.mode === 'quick-pair' ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'}`}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+            <label className={`relative flex items-start gap-3 cursor-pointer p-3 md:p-4 border-2 rounded-xl transition-all ${config.mode === 'quick-pair' ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'}`}>
               <input
                 type="radio"
                 name="mode"
                 value="quick-pair"
                 checked={config.mode === 'quick-pair'}
                 onChange={handleChange}
-                className="mt-1 accent-blue-600 w-4 h-4"
+                className="mt-1 accent-blue-600 w-4 h-4 shrink-0"
               />
               <div>
-                  <span className={`font-bold block ${config.mode === 'quick-pair' ? 'text-blue-700' : 'text-gray-700'}`}>Quick Pair</span>
+                  <span className={`font-bold block text-sm md:text-base ${config.mode === 'quick-pair' ? 'text-blue-700' : 'text-gray-700'}`}>Quick Pair</span>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">Single time slot. Randomly pairs everyone once. Parallel meetings.</p>
               </div>
             </label>
-            <label className={`relative flex items-start gap-3 cursor-pointer p-4 border-2 rounded-xl transition-all ${config.mode === 'round-robin' ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <label className={`relative flex items-start gap-3 cursor-pointer p-3 md:p-4 border-2 rounded-xl transition-all ${config.mode === 'round-robin' ? 'border-blue-500 bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'}`}>
               <input
                 type="radio"
                 name="mode"
                 value="round-robin"
                 checked={config.mode === 'round-robin'}
                 onChange={handleChange}
-                className="mt-1 accent-blue-600 w-4 h-4"
+                className="mt-1 accent-blue-600 w-4 h-4 shrink-0"
               />
               <div>
-                  <span className={`font-bold block ${config.mode === 'round-robin' ? 'text-blue-700' : 'text-gray-700'}`}>Round Robin</span>
+                  <span className={`font-bold block text-sm md:text-base ${config.mode === 'round-robin' ? 'text-blue-700' : 'text-gray-700'}`}>Round Robin</span>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">Multiple time slots. Everyone meets everyone else sequentially.</p>
               </div>
             </label>

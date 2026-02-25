@@ -126,7 +126,7 @@ const ParticipantInput = ({ participants, setParticipants }) => {
             <FileText className="absolute right-4 top-4 text-gray-300 pointer-events-none" size={20} />
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
             <button
                 onClick={handleTextPaste}
                 className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all font-medium shadow-sm hover:shadow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"

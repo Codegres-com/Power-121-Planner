@@ -1,6 +1,6 @@
-# 1:1 Round Robin & Mesh Scheduler
+# Power121 - 1:1 Round Robin & Mesh Scheduler
 
-A frontend-only React application to generate and schedule 1-on-1 meetings with automatic Google Meet integration.
+Power121 is a frontend-only React application to generate and schedule 1-on-1 meetings with automatic Google Meet integration.
 
 ## Features
 
