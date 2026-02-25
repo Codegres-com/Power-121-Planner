@@ -1,4 +1,4 @@
-import { addHours, isBefore, isAfter, isSameMinute, startOfHour } from 'date-fns';
+import { addHours, addMinutes, isBefore, isAfter, isSameMinute, startOfHour } from 'date-fns';
 
 /**
  * Generates a schedule for 1-on-1 meetings.
@@ -8,17 +8,14 @@ import { addHours, isBefore, isAfter, isSameMinute, startOfHour } from 'date-fns
  * @param {number} [options.maxRounds] - Optional limit on number of rounds (for Round Robin).
  * @param {Date} options.startDate - Start date and time for scheduling.
  * @param {Date} options.endDate - End date and time limit.
+ * @param {number} [options.duration] - Duration in minutes.
  * @returns {Array} List of scheduled meetings: { round, timeSlot, pair: [p1, p2] }.
  */
-export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds = null, startDate, endDate }) => {
+export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds = null, startDate, endDate, duration = 60 }) => {
   if (!participants || participants.length < 2) return [];
 
   const schedule = [];
   let currentSlot = new Date(startDate);
-
-  // Ensure we start at the beginning of the hour if desired?
-  // User didn't specify, but "1 hour slot" implies clean slots.
-  // For now, respect the exact start time provided by the user.
 
   if (mode === 'quick-pair') {
     // Quick Pair: Single round, random pairings
@@ -30,7 +27,8 @@ export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds 
     }
 
     // Check time constraints
-    if (isAfter(addHours(currentSlot, 1), endDate) && !isSameMinute(addHours(currentSlot, 1), endDate)) {
+    const endOfMeeting = addMinutes(currentSlot, duration);
+    if (isAfter(endOfMeeting, endDate) && !isSameMinute(endOfMeeting, endDate)) {
        console.warn('Scheduled time exceeds end date.');
        return [];
     }
@@ -51,9 +49,9 @@ export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds 
     for (let i = 0; i < limit; i++) {
         const roundPairs = rounds[i];
 
-        // Check if current slot + 1 hour is within endDate
+        // Check if current slot + duration is within endDate
         // allow if end of meeting matches endDate exactly
-        const endOfMeeting = addHours(currentSlot, 1);
+        const endOfMeeting = addMinutes(currentSlot, duration);
 
         if (isAfter(endOfMeeting, endDate) && !isSameMinute(endOfMeeting, endDate)) {
             console.warn(`Not enough time slots for round ${i + 1}`);
@@ -69,7 +67,7 @@ export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds 
         });
 
         // Advance to next slot
-        currentSlot = addHours(currentSlot, 1);
+        currentSlot = addMinutes(currentSlot, duration);
     }
   }
 

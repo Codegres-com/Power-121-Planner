@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { format, addHours, startOfHour, isAfter } from 'date-fns';
+import { format, addHours, addMinutes, startOfHour, isAfter } from 'date-fns';
 import { Calendar, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import ParticipantInput from './components/ParticipantInput';
 import ConfigPanel from './components/ConfigPanel';
@@ -24,6 +24,8 @@ function App() {
     endDate: format(addHours(startOfHour(addHours(new Date(), 1)), 4), "yyyy-MM-dd'T'HH:mm"),
     maxRounds: '',
     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID || '',
+    meetingTitle: '',
+    meetingDuration: 60,
   });
 
   // App State
@@ -98,11 +100,13 @@ function App() {
         return;
     }
 
+    const duration = parseInt(config.meetingDuration) || 60;
     const generated = generateSchedule(participants, {
         mode: config.mode,
         startDate: start,
         endDate: end,
-        maxRounds: config.maxRounds ? parseInt(config.maxRounds) : null
+        maxRounds: config.maxRounds ? parseInt(config.maxRounds) : null,
+        duration: duration
     });
 
     if (generated.length === 0) {
@@ -134,11 +138,14 @@ function App() {
     for (let i = 0; i < schedule.length; i++) {
         const meeting = schedule[i];
         try {
+            const titlePrefix = config.meetingTitle ? config.meetingTitle.trim() : '1:1';
+            const duration = parseInt(config.meetingDuration) || 60;
+
             await createCalendarEvent({
-                summary: `1:1 - ${meeting.pair[0].name} vs ${meeting.pair[1].name}`,
+                summary: `${titlePrefix} - ${meeting.pair[0].name} vs ${meeting.pair[1].name}`,
                 description: `Round Robin Meeting (Round ${meeting.round}).\n\nParticipants:\n- ${meeting.pair[0].name} (${meeting.pair[0].email})\n- ${meeting.pair[1].name} (${meeting.pair[1].email})`,
                 start: meeting.timeSlot,
-                end: addHours(meeting.timeSlot, 1), // 1 hour duration
+                end: addMinutes(meeting.timeSlot, duration),
                 attendees: [
                     { email: meeting.pair[0].email },
                     { email: meeting.pair[1].email }

@@ -83,20 +83,46 @@ const ConfigPanel = ({ config, setConfig }) => {
               </div>
             </div>
 
-            {config.mode === 'round-robin' && (
-               <div>
-                   <label className="block text-sm font-medium text-gray-700 mb-1">Max Rounds (Optional)</label>
+            <div className="grid grid-cols-2 gap-2">
+                <div>
+                   <label className="block text-sm font-medium text-gray-700 mb-1">Duration (Min)</label>
                    <input
                      type="number"
-                     name="maxRounds"
-                     value={config.maxRounds || ''}
+                     name="meetingDuration"
+                     value={config.meetingDuration}
                      onChange={handleChange}
-                     placeholder="Default: All possible rounds"
                      className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
                      min="1"
                    />
-               </div>
-            )}
+                </div>
+                {config.mode === 'round-robin' && (
+                   <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-1">Max Rounds</label>
+                       <input
+                         type="number"
+                         name="maxRounds"
+                         value={config.maxRounds || ''}
+                         onChange={handleChange}
+                         placeholder="All"
+                         className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+                         min="1"
+                       />
+                   </div>
+                )}
+            </div>
+
+            <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Meeting Title Prefix</label>
+                <input
+                    type="text"
+                    name="meetingTitle"
+                    value={config.meetingTitle}
+                    onChange={handleChange}
+                    placeholder="e.g. 1:1 Sync"
+                    className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <p className="text-[10px] text-gray-500 mt-1">Appended with " - Name vs Name"</p>
+            </div>
         </div>
 
 
