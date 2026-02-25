@@ -114,7 +114,7 @@ function Home({ isSignedIn, userProfile, onSignIn }) {
   };
 
   return (
-      <main className="max-w-5xl mx-auto px-4 py-8 flex-grow w-full">
+      <main className="max-w-3xl mx-auto px-4 py-8 flex-grow w-full">
         {status.message && (
             <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
                 status.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' :
@@ -138,8 +138,8 @@ function Home({ isSignedIn, userProfile, onSignIn }) {
             </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-1 space-y-6">
+        <div className="grid grid-cols-1 gap-8">
+            <div className="space-y-6">
                 <ConfigPanel config={config} setConfig={setConfig} />
                 <ParticipantInput participants={participants} setParticipants={setParticipants} />
 
@@ -151,7 +151,7 @@ function Home({ isSignedIn, userProfile, onSignIn }) {
                 </button>
             </div>
 
-            <div className="lg:col-span-2">
+            <div>
                 {schedule.length > 0 ? (
                     <>
                         <SchedulePreview schedule={schedule} />

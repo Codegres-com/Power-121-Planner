@@ -19,7 +19,7 @@ function Layout({ children, isSignedIn, userProfile, onSignIn, onSignOut }) {
         <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col">
           {/* Header */}
           <header className="bg-white shadow-sm sticky top-0 z-50">
-            <div className="max-w-5xl mx-auto px-4 py-3 md:py-4 flex flex-wrap justify-between items-center gap-4">
+            <div className="max-w-3xl mx-auto px-4 py-3 md:py-4 flex flex-wrap justify-between items-center gap-4">
               <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <img src={logo} alt="Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
                 <div className="flex flex-col">
@@ -49,7 +49,7 @@ function Layout({ children, isSignedIn, userProfile, onSignIn, onSignOut }) {
 
           {/* Footer */}
           <footer className="bg-white border-t border-gray-100 py-6 md:py-8 mt-auto">
-            <div className="max-w-5xl mx-auto px-4 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-sm text-gray-500 text-center md:text-left">
+            <div className="max-w-3xl mx-auto px-4 flex flex-col-reverse md:flex-row justify-between items-center gap-4 text-sm text-gray-500 text-center md:text-left">
                 <p>&copy; {new Date().getFullYear()} Power121. All rights reserved.</p>
                 <div className="flex flex-wrap justify-center gap-4 md:gap-6">
                     <Link to="/privacy-policy" className="hover:text-blue-600 transition-colors">Privacy Policy</Link>
