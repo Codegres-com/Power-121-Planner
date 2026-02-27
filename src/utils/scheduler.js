@@ -84,82 +84,95 @@ export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds 
 };
 
 /**
- * Generates rounds for groups > 2 using a randomized greedy approach.
- * Tries to minimize meeting the same people again.
+ * Generates rounds for groups > 2.
+ * Ensures strict condition: each unordered pair must occur strictly at most once.
+ * Maximizes the number of valid rounds using randomized DFS backtracking.
  */
 function generateGroupRounds(participants, groupSize, maxRounds) {
     const rounds = [];
-    const history = new Map(); // key: email, value: Set(emails met)
+    const history = new Map();
 
-    // Initialize history
     participants.forEach(p => history.set(p.email, new Set()));
 
-    for (let r = 0; r < maxRounds; r++) {
-        // Try multiple shuffles to find the best grouping for this round
-        let bestRoundGroups = [];
-        let minOverlapScore = Infinity;
+    const n = participants.length;
+    let groupSizes = [];
+    let remainder = n % groupSize;
+    let numGroups = Math.floor(n / groupSize);
+    
+    for (let i = 0; i < numGroups; i++) {
+        groupSizes.push(groupSize);
+    }
+    if (remainder === 1 && numGroups > 0) {
+        groupSizes[groupSizes.length - 1]++;
+    } else if (remainder > 1) {
+        groupSizes.push(remainder);
+    } else if (remainder === 1 && numGroups === 0) {
+        groupSizes.push(1);
+    }
 
-        // Number of attempts to find a good grouping
-        const attempts = 50; 
+    const theoreticalMax = n;
+    const limit = maxRounds || theoreticalMax;
+    const emailToParticipant = {};
+    participants.forEach(p => emailToParticipant[p.email] = p);
 
+    for (let r = 0; r < limit; r++) {
+        let bestRound = null;
+        let pEmails = participants.map(p => p.email);
+        
+        const attempts = 100;
         for (let attempt = 0; attempt < attempts; attempt++) {
-            const shuffled = [...participants].sort(() => 0.5 - Math.random());
-            const currentGroups = [];
-            let currentOverlapScore = 0;
-
-            for (let i = 0; i < shuffled.length; i += groupSize) {
-                const chunk = shuffled.slice(i, i + groupSize);
+            pEmails.sort(() => Math.random() - 0.5);
+            let currentGroups = Array(groupSizes.length).fill(0).map(() => []);
+            let iters = 0;
+            
+            function solve(pIndex) {
+                if (iters++ > 5000) return false;
+                if (pIndex === n) return true;
                 
-                // Handle remainder: merge into last group if too small
-                if (chunk.length < 2 && currentGroups.length > 0) {
-                    currentGroups[currentGroups.length - 1].push(...chunk);
-                } else {
-                    currentGroups.push(chunk);
-                }
-            }
-
-            // Calculate overlap score for this configuration
-            // Score = sum of how many times each pair in a group has met before
-            currentGroups.forEach(group => {
-                for (let i = 0; i < group.length; i++) {
-                    for (let j = i + 1; j < group.length; j++) {
-                        const p1 = group[i];
-                        const p2 = group[j];
-                        if (history.get(p1.email).has(p2.email)) {
-                            currentOverlapScore++;
+                let p = pEmails[pIndex];
+                
+                for (let gIndex = 0; gIndex < groupSizes.length; gIndex++) {
+                    if (currentGroups[gIndex].length < groupSizes[gIndex]) {
+                        let canAdd = true;
+                        for (let other of currentGroups[gIndex]) {
+                            if (history.get(p).has(other)) {
+                                canAdd = false;
+                                break;
+                            }
+                        }
+                        
+                        if (canAdd) {
+                            currentGroups[gIndex].push(p);
+                            if (solve(pIndex + 1)) return true;
+                            currentGroups[gIndex].pop();
+                        }
+                        
+                        if (currentGroups[gIndex].length === 0) {
+                            break;
                         }
                     }
                 }
-            });
-            
-            // If perfect round found (score 0), take it immediately
-            if (currentOverlapScore === 0) {
-                bestRoundGroups = currentGroups;
-                minOverlapScore = 0;
-                break;
+                return false;
             }
-
-            if (currentOverlapScore < minOverlapScore) {
-                minOverlapScore = currentOverlapScore;
-                bestRoundGroups = currentGroups;
+            
+            if (solve(0)) {
+                bestRound = currentGroups.map(g => g.map(email => emailToParticipant[email]));
+                break;
             }
         }
 
-        // Add best groups to rounds
-        if (bestRoundGroups.length > 0) {
-             rounds.push(bestRoundGroups);
-             
-             // Update history
-             bestRoundGroups.forEach(group => {
+        if (bestRound) {
+            rounds.push(bestRound);
+            bestRound.forEach(group => {
                 for (let i = 0; i < group.length; i++) {
                     for (let j = i + 1; j < group.length; j++) {
-                        const p1 = group[i];
-                        const p2 = group[j];
-                        history.get(p1.email).add(p2.email);
-                        history.get(p2.email).add(p1.email);
+                        history.get(group[i].email).add(group[j].email);
+                        history.get(group[j].email).add(group[i].email);
                     }
                 }
             });
+        } else {
+            break; 
         }
     }
     
