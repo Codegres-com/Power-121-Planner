@@ -1,0 +1,3 @@
+// Append this function to src/utils/googleApi.js
+// Wait, I should use read/write or append. Since I can't append easily, I'll define it inside App.jsx or rewrite googleApi.js.
+// Since googleApi.js is getting complicated, I'll just fetch user profile in App.jsx using fetch().
