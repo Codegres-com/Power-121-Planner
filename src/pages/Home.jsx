@@ -90,15 +90,21 @@ function Home({ isSignedIn, userProfile, onSignIn }) {
             const titlePrefix = config.meetingTitle ? config.meetingTitle.trim() : '1:1';
             const duration = parseInt(config.meetingDuration) || 60;
             
+            const isGroup = meeting.pair.length > 2;
+            const summaryTitle = isGroup
+                 ? `${titlePrefix} ${meeting.table}`
+                 : `${titlePrefix} (${meeting.table}) - ${meeting.pair[0].name} vs ${meeting.pair[1].name}`;
+
+            const descriptionText = isGroup
+                 ? `Group Meeting (Round ${meeting.round}, ${meeting.table}).\n\nParticipants:\n${meeting.pair.map(p => `- ${p.name} (${p.email})`).join('\n')}`
+                 : `Round Robin Meeting (Round ${meeting.round}, ${meeting.table}).\n\nParticipants:\n- ${meeting.pair[0].name} (${meeting.pair[0].email})\n- ${meeting.pair[1].name} (${meeting.pair[1].email})`;
+
             await createCalendarEvent({
-                summary: `${titlePrefix} - ${meeting.pair[0].name} vs ${meeting.pair[1].name}`,
-                description: `Round Robin Meeting (Round ${meeting.round}).\n\nParticipants:\n- ${meeting.pair[0].name} (${meeting.pair[0].email})\n- ${meeting.pair[1].name} (${meeting.pair[1].email})`,
+                summary: summaryTitle,
+                description: descriptionText,
                 start: meeting.timeSlot,
                 end: addMinutes(meeting.timeSlot, duration), 
-                attendees: [
-                    { email: meeting.pair[0].email },
-                    { email: meeting.pair[1].email }
-                ]
+                attendees: meeting.pair.map(p => ({ email: p.email }))
             });
             successCount++;
         } catch (error) {

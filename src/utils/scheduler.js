@@ -33,9 +33,10 @@ export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds 
     }
 
     if (rounds.length > 0) {
-        rounds[0].forEach((group) => {
+        rounds[0].forEach((group, idx) => {
             schedule.push({
                 round: 1,
+                table: `Table ${String.fromCharCode(65 + idx)}`,
                 timeSlot: new Date(currentSlot),
                 pair: group
             });
@@ -67,9 +68,10 @@ export const generateSchedule = (participants, { mode = 'quick-pair', maxRounds 
             break; 
         }
 
-        roundGroups.forEach(group => {
+        roundGroups.forEach((group, idx) => {
             schedule.push({
                 round: i + 1,
+                table: `Table ${String.fromCharCode(65 + idx)}`,
                 timeSlot: new Date(currentSlot),
                 pair: group
             });

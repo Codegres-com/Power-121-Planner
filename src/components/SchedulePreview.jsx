@@ -49,8 +49,13 @@ const SchedulePreview = ({ schedule }) => {
                 </div>
                 <div className="divide-y divide-gray-100">
                     {meetings.map((meeting, idx) => (
-                        <div key={idx} className="px-4 py-4 flex flex-col md:flex-row justify-between items-center hover:bg-gray-50/50 transition-colors gap-3 group">
-                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center w-full justify-center md:justify-start">
+                        <div key={idx} className="px-4 py-4 flex flex-col md:flex-row justify-between items-center hover:bg-gray-50/50 transition-colors gap-3 group relative cursor-default">
+                            <div className="absolute top-2 left-3 md:static md:w-24 shrink-0 flex items-center justify-center">
+                                <span className="text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-md shadow-sm">
+                                    {meeting.table}
+                                </span>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center w-full justify-center md:justify-start pt-6 md:pt-0">
                                 {/* Player 1 */}
                                 <div className="flex items-center gap-3 w-full sm:w-auto sm:min-w-[140px] justify-center sm:justify-end">
                                     <div className="flex flex-col items-center sm:items-end text-center sm:text-right">
